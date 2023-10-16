@@ -3,13 +3,7 @@ const app = express();
 
 const PORT = 3000;
 
-const sampleData = {
-  firstName: "Ryan",
-  middleName: "Gonzaga",
-  lastName: "Bitonio",
-  mobileNumber: "09760760951",
-  email: "ryanbitonio.ayang@gmail.com",
-};
+const getEmployees = require("./controllers/employees.controller");
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -19,9 +13,7 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.baseUrl}${req.url} ${delta}ms`);
 });
 
-app.get("/", (req, res) => {
-  res.json(sampleData);
-});
+app.get("/employees", getEmployees);
 
 app.listen(PORT, () => {
   console.log(`Listening on PORT ${PORT}...`);

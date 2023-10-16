@@ -1,3 +1,5 @@
+const https = require("https");
+const fs = require("fs");
 const express = require("express");
 const app = express();
 
@@ -16,6 +18,14 @@ app.use((req, res, next) => {
 
 app.use("/employees", employeesRouter);
 
-app.listen(PORT, () => {
-  console.log(`Listening on PORT ${PORT}...`);
-});
+https
+  .createServer(
+    {
+      key: fs.readFileSync("key.pem"),
+      cert: fs.readFileSync("cert.pem"),
+    },
+    app
+  )
+  .listen(PORT, () => {
+    console.log(`Listening on PORT ${PORT}...`);
+  });

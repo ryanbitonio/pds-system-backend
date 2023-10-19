@@ -1,5 +1,3 @@
-const https = require("https");
-const fs = require("fs");
 const cors = require("cors");
 
 const helmet = require("helmet");
@@ -56,14 +54,6 @@ app.get("/", (req, res) => {
   });
 });
 
-https
-  .createServer(
-    {
-      key: fs.readFileSync("key.pem"),
-      cert: fs.readFileSync("cert.pem"),
-    },
-    app
-  )
-  .listen(PORT, () => {
-    console.log(`Listening on PORT ${PORT}...`);
-  });
+app.listen(PORT, () => {
+  console.log(`Listening on PORT ${PORT}...`);
+});

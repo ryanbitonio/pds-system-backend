@@ -1,7 +1,7 @@
-const sampleEmployee = require("../models/employees.model");
+const sampleEmployees = require("../models/employees.model");
 
 function getEmployees(req, res) {
-  res.json(sampleEmployee);
+  res.json(sampleEmployees);
 }
 
 module.exports = getEmployees;

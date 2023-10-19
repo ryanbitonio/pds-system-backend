@@ -1,32 +1,25 @@
 const https = require("https");
 const fs = require("fs");
-const path = require("path");
 const cors = require("cors");
+
+const helmet = require("helmet");
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const cookieSession = require("cookie-session");
+require("./auth/passport");
+const generateKey = require("./auth/services");
+
 const express = require("express");
 const app = express();
-const helmet = require("helmet");
-const cookieSession = require("cookie-session");
 
 require("dotenv").config();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const employeesRouter = require("./routes/employees.router");
-const { checkLoggedIn } = require("./auth/services");
-
-const AUTH_OPTIONS = require("./auth/options");
-const config = require("./config");
+const authRouter = require("./routes/auth.router.js");
 
 app.use(express.json());
 app.use(helmet());
-
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-  })
-);
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -35,73 +28,31 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.baseUrl}${req.url} ${delta}ms`);
 });
 
-function verifyCallback(accessToken, refreshToken, profile, done) {
-  console.log("Google profile: ", profile);
-  done(null, profile);
-}
-
-passport.use(new GoogleStrategy(AUTH_OPTIONS, verifyCallback));
-
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-
 app.use(
   cookieSession({
     name: "session",
     maxAge: 24 * 60 * 60 * 1000,
-    keys: [config.COOKIE_KEY_1, config.COOKIE_KEY_2],
+    keys: [generateKey(), generateKey()],
   })
 );
-
-app.use((req, res, next) => {
-  if (req.session && !req.session.regenerate) {
-    req.session.regenerate = cb => {
-      cb();
-    };
-  }
-  if (req.session && !req.session.save) {
-    req.session.save = cb => {
-      cb();
-    };
-  }
-  next();
-});
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/employees", checkLoggedIn, employeesRouter);
-
-app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile"] })
-);
-
-app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/failure",
-    successRedirect: process.env.CLIENT_URL,
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
   })
 );
 
-app.get("/auth/logout", (req, res, next) => {
-  req.logout(err => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
-});
+app.use("/auth", authRouter);
 
-app.get("/failure", (req, res) => {
+app.use("/employees", employeesRouter);
+
+app.get("/", (req, res) => {
   res.json({
-    error: "Failed to log in",
+    message: "Homepage",
   });
 });
 

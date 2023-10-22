@@ -11,7 +11,7 @@ authRouter.get("/login/success", (req, res) => {
 
 authRouter.get("/logout", (req, res) => {
   req.logout();
-  res.redirect(process.env.CLIENT_URL);
+  res.redirect(process.env.CLIENT_URL || "http://localhost:5173");
 });
 
 authRouter.get("/failure", (req, res) => {
@@ -29,7 +29,8 @@ authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/failure",
-    successRedirect: `${process.env.CLIENT_URL}/contact`,
+    successRedirect:
+      "http://localhost:5173/contact" || `${process.env.CLIENT_URL}/contact`,
   })
 );
 

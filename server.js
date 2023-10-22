@@ -11,7 +11,7 @@ const app = express();
 
 require("dotenv").config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 const employeesRouter = require("./routes/employees.router");
 const authRouter = require("./routes/auth.router.js");
@@ -39,7 +39,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "https://pds-system-frontend.vercel.app",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
   })
 );

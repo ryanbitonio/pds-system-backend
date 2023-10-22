@@ -32,7 +32,7 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000,
     keys: [generateKey(), generateKey()],
     secure: true,
-    sameSite: "none",
+    sameSite: "lax",
   })
 );
 

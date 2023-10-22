@@ -39,7 +39,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://pds-system-frontend.vercel.app",
     credentials: true,
   })
 );

@@ -30,7 +30,7 @@ authRouter.get(
   passport.authenticate("google", {
     failureRedirect: "/failure",
     successRedirect:
-      "http://localhost:5173/contact" || `${process.env.CLIENT_URL}/contact`,
+      process.env.CLIENT_CONTACT_URL || "http://localhost:5173/contact",
   })
 );
 

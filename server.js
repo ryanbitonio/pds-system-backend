@@ -26,25 +26,14 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.baseUrl}${req.url} ${delta}ms`);
 });
 
-if (process.env.PORT) {
-  app.use(
-    cookieSession({
-      name: "session",
-      maxAge: 24 * 60 * 60 * 1000,
-      keys: [generateKey(), generateKey()],
-      secure: true,
-    })
-  );
-} else {
-  app.use(
-    cookieSession({
-      name: "session",
-      maxAge: 24 * 60 * 60 * 1000,
-      keys: [generateKey(), generateKey()],
-      secure: false,
-    })
-  );
-}
+app.use(
+  cookieSession({
+    name: "session",
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [generateKey(), generateKey()],
+    secure: true,
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());

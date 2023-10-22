@@ -6,7 +6,7 @@ require("dotenv").config();
 const AUTH_OPTIONS = {
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  callbackURL: "/auth/google/callback",
+  callbackURL: "https://pds-system.onrender.com/auth/google/callback",
   scope: ["profile"],
 };
 

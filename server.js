@@ -32,6 +32,7 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000,
     keys: [generateKey(), generateKey()],
     secure: true,
+    sameSite: "none",
   })
 );
 
@@ -42,7 +43,6 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
-    secure: true,
   })
 );
 
